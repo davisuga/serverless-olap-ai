@@ -1,0 +1,5 @@
+{
+  "exclude": ["venv", "node_modules", "dist", "build", "*.pyc"],
+  "reportMissingTypeStubs": "none",
+  "reportIncompleteStub": "none"
+}

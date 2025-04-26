@@ -1,0 +1,47 @@
+[project]
+name = "serverless-olap-ai"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+
+dependencies = [
+    "annotated-types",
+    "anyio",
+    "certifi",
+    "charset-normalizer",
+    "chdb>=3.2.0",
+    "click",
+    "distro",
+    "dnspython",
+    "email-validator",
+    "fastapi",
+    "fastapi-cli",
+    "h11",
+    "httpcore",
+    "httptools",
+    "httpx",
+    "idna",
+    "jinja2",
+    "markdown-it-py",
+    "markupsafe",
+    "mdurl",
+    "pydantic",
+    "pydantic-ai>=0.1.6",
+    "pygments",
+    "python-dotenv",
+    "python-multipart",
+    "pyyaml",
+    "requests",
+    "rich",
+    "shellingham",
+    "sniffio",
+    "starlette",
+    "tqdm",
+    "typer",
+    "typing-extensions",
+    "urllib3",
+    "uvicorn",
+    "uvloop>=0.21.0",
+    "watchfiles",
+    "websockets",
+]
