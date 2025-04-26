@@ -31,7 +31,7 @@ load_dotenv(".env.local")
 app = FastAPI()
 
 # Create a connection (in-memory by default)
-conn = duckdb.connect("test.db")
+conn = duckdb.connect("/tmp/test.db")
 
 # Initialize PydanticAI Agent with OpenAI model
 # model = GroqModel("meta-llama/llama-4-maverick-17b-128e-instruct")
