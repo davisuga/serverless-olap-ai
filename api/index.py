@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Query
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from pydantic_ai import Agent, RunContext, result
+from pydantic_ai import Agent, RunContext
 from pydantic_ai.models.gemini import GeminiModel
 from pydantic_ai.models.groq import GroqModel
 from pydantic_ai.messages import (
@@ -22,7 +22,7 @@ from pydantic_ai.usage import Usage
 from .utils.tools import get_current_weather
 from .utils.prompt import ClientMessage, convert_to_openai_messages
 from typing import List, Dict, Any, cast, AsyncGenerator
-import chdb
+import duckdb
 
 import json
 
@@ -31,7 +31,7 @@ load_dotenv(".env.local")
 app = FastAPI()
 
 # Create a connection (in-memory by default)
-conn = chdb.connect("test.db")
+conn = duckdb.connect("test.db")
 
 # Initialize PydanticAI Agent with OpenAI model
 # model = GroqModel("meta-llama/llama-4-maverick-17b-128e-instruct")
@@ -49,7 +49,7 @@ def get_current_weather_tool(ctx: RunContext[None], latitude: float, longitude: 
     return get_current_weather(latitude, longitude)
 
 
-def run_chdb_query(query: str):
+def run_duckdb_query(query: str):
     print("run_chdb_query")
     cur = conn.cursor()
     cur.execute(query)
@@ -59,14 +59,14 @@ def run_chdb_query(query: str):
 
 
 @agent.tool
-def get_chdb_schema_tool(ctx: RunContext[None]):
+def get_duckdb_schema_tool(ctx: RunContext[None]):
     return get_schema()
 
 
 def get_schema():
     query = "SELECT database, table, name AS column_name, type AS column_type FROM system.columns WHERE database NOT IN ('SYSTEM', 'INFORMATION_SCHEMA', 'information_schema', 'system') ORDER BY database, table, position;"
 
-    rows = run_chdb_query(query)
+    rows = run_duckdb_query(query)
     schema = {}
     for table, name, col_type in rows:
         schema.setdefault(table, []).append(f"{name}:{col_type}")
@@ -83,7 +83,7 @@ def get_schema():
 def run_chdb_query_tool(ctx: RunContext[None], query: str):
     print("run_chdb_query_tool")
     try:
-        return run_chdb_query(query)
+        return run_duckdb_query(query)
     except Exception as e:
         return str(e)
 
@@ -105,7 +105,7 @@ class QueryRequest(BaseModel):
 async def handle_query_data(request: QueryRequest):
     print("handle_query_data")
     try:
-        return run_chdb_query(request.query)
+        return run_duckdb_query(request.query)
     except Exception as e:
         stacktrace = traceback.format_exc()
         return {"error": str(e), "stacktrace": stacktrace}

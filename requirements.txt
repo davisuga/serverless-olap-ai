@@ -2,7 +2,7 @@ annotated-types
 anyio
 certifi
 charset-normalizer
-chdb>=3.2.0
+duckdb
 click
 distro
 dnspython
